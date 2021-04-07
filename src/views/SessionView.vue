@@ -113,7 +113,7 @@ export default {
             meeting_id: this.sessionID,
             uuid: this.uuid,
             name: this.displayName
-          }
+          };
           const blob = {
             user: user,
             dialogue: this.recordedSpeech[index].text,
