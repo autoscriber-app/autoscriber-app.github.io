@@ -5,6 +5,7 @@ import router from './router';
 import './registerServiceWorker';
 import VuetifyDialog from 'vuetify-dialog';
 import 'vuetify-dialog/dist/vuetify-dialog.css';
+import error from './components/error.js';
 
 Vue.use(VuetifyDialog, {
   context: {
@@ -14,10 +15,7 @@ Vue.use(VuetifyDialog, {
 Vue.config.productionTip = false;
 
 Vue.config.errorHandler = (err, vm, info) => { 
-  vm.$dialog.error({
-    title: err.toString(),
-    text: `Autoscriber encountered an error in ${info}.`
-  });
+  error(vm.$dialog, err, info);
 };
 
 new Vue({

@@ -24,6 +24,7 @@
 import axios from 'axios';
 import askUser from '../components/askUser.js';
 import { saveAs } from 'file-saver';
+import error from '../components/error.js';
 const backend_domain = process.env.VUE_APP_BACKEND_DOMAIN;
 const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
 recognition.continuous = false;
@@ -65,7 +66,10 @@ export default {
       const meetingID = await this.getMeetingId();
       if (meetingID) {
         const text = await axios.get(`${backend_domain}/download?id=${meetingID}`);
-        saveAs(new Blob([text], {type: 'text/plain;charset=utf-8'}), `notes_${meetingID}.md`); 
+        if (typeof text !== 'string') error(this.$dialog, 
+          new Error('Could not download notes'), 
+          text.data.detail);
+        else saveAs(new Blob([text], {type: 'text/plain;charset=utf-8'}), `notes_${meetingID}.md`); 
       }
     }
   }
