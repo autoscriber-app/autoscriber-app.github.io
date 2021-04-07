@@ -109,11 +109,14 @@ export default {
           });
           
           // Make post request after each blob
-          const time = Math.floor(new Date().getTime()/1000);  // timestamp in seconds
-          const blob = {
+          const user = {
+            meeting_id: this.sessionID,
             uuid: this.uuid,
-            message: this.recordedSpeech[index].text,
-            timestamp: time,
+            name: this.displayName
+          }
+          const blob = {
+            user: user,
+            dialogue: this.recordedSpeech[index].text,
           }; // Current blob
           const res = await axios.post(`${backend_domain}/add`, blob);
           if (!this.uuid) {
