@@ -62,7 +62,7 @@
           color="pink"
           @click="endRecording()"
         >
-          Finish and Summarize
+          Stop Listening
         </v-btn>
       </v-card-actions>
     </span>
@@ -91,7 +91,8 @@ export default {
     recognition,
     started: false,
     copied: false,
-    displayName: ''
+    displayName: '',
+    socket: null
   }),
   methods: {
     startRecognition() {
@@ -149,6 +150,12 @@ export default {
       this.copied = setTimeout(() => {
         this.copied = false;
       }, 1000);
+    },
+    async connectWS() {
+      if (this.isHost) {
+        this.socket = new WebSocket(`${backend_domain.replace('https', 'ws')}/hostWS`);
+        this.socket.on('open', () => {});
+      }
     }
   },
   async mounted(){
@@ -168,6 +175,10 @@ export default {
     sessionID:{
       type: String,
       required: true
+    },
+    isHost: {
+      type: Boolean,
+      default: false
     }
   }
 };
