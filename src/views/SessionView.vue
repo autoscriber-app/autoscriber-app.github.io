@@ -190,7 +190,7 @@ export default {
     },
     isHost: {
       type: Boolean,
-      default: true
+      default: false
     }
   }
 };
