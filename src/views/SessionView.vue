@@ -55,17 +55,17 @@
           {{ item.text }}
         </p>
       </v-card-subtitle>
-      <v-card-actions class="justify-end">
-        <v-btn v-if="recordedSpeech[0].text" class="pink justify-center"
-          dark
-          x-large
-          color="pink"
-          @click="endRecording()"
-        >
-          Stop Listening
-        </v-btn>
-      </v-card-actions>
     </span>
+    <v-card-actions class="justify-end">
+      <v-btn v-if="isHost" class="pink justify-center"
+        dark
+        x-large
+        color="pink"
+        @click="endRecording()"
+      >
+        End the Session
+      </v-btn>
+    </v-card-actions>
   </v-card>
 </template>
 
@@ -137,12 +137,24 @@ export default {
       this.recognition.stop();
       this.started = false;
     },
-    endRecording() {
-      if (this.started) {
-        this.stopRecognition();
+    async endRecording() {
+      if (await this.$dialog.confirm({
+        title: 'End Session',
+        text: 'Are you sure you want to end the session for all participants?'
+      })){
+        if (this.started) {
+          this.stopRecognition();
+        }
+        axios.post(`${backend_domain}/end`, {
+          meeting_id: this.sessionID,
+          uid: this.uuid,
+          name: this.name
+        });
+        await this.$dialog.info({
+          title: 'Session Ended',
+          text: 'The session was ended! Your notes will be available for download shortly.'
+        });
       }
-      
-      // do backend stuff!
     },
     copyID() {
       copy(`${window.location.origin}#/session/${this.sessionID}`);
@@ -178,7 +190,7 @@ export default {
     },
     isHost: {
       type: Boolean,
-      default: false
+      default: true
     }
   }
 };
