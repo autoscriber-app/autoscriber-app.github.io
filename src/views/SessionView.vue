@@ -145,7 +145,7 @@ export default {
         if (this.started) {
           this.stopRecognition();
         }
-        axios.post(`${backend_domain}/end`, {
+        await axios.post(`${backend_domain}/end`, {
           meeting_id: this.sessionID,
           uid: this.uuid,
           name: this.name
@@ -154,7 +154,8 @@ export default {
           title: 'Session Ended',
           text: 'The session was ended! Your notes will be available for download shortly.'
         });
-      }
+        return true;
+      } else return false;
     },
     copyID() {
       copy(`${window.location.origin}#/session/${this.sessionID}`);
@@ -165,19 +166,31 @@ export default {
     },
     async connectWS() {
       if (this.isHost) {
-        this.socket = new WebSocket(`${backend_domain.replace('https', 'ws')}/hostWS`);
-        this.socket.on('open', () => {});
+        this.socket = new WebSocket(`${backend_domain.replace('https', 'wss')}/hostWS`);
       }
     }
   },
   async mounted(){
+    if (!(await axios.get(`${backend_domain}/is_valid_meeting`, {
+      params: {
+        meeting_id: this.sessionID
+      }
+    })).data) {
+      await this.$dialog.error({
+        title: 'Invalid Session',
+        text: 'The session you specified doesn\'t exist.'
+      });
+      this.$router.push('/');
+      return;
+    }
     const name = (this.name || await askUser(this.$dialog, 'name') || 'Anonymous').trim();
     if (!name) return;
     this.displayName = name;
-    axios.post(`${backend_domain}/join`, {
+    await axios.post(`${backend_domain}/join`, {
       name,
       meeting_id: this.sessionID
     });
+    this.connectWS();
   },
   props: {
     name:{
@@ -192,6 +205,21 @@ export default {
       type: Boolean,
       default: false
     }
+  },
+  async beforeRouteLeave(to, from, next) {
+    if (this.isHost) {
+      if (await this.endRecording()) next(true);
+    } else if (await this.$dialog.confirm({
+      title: this.isHost ? 'End the Session' : 'Disconnect from Session',
+      text: `Are you sure you want to ${this.isHost ? 'end' : 'disconnect from'} this session?`,
+      actions: {
+        false: 'No',
+        true: {
+          text: 'Yes',
+          color: 'primary'
+        },
+      }
+    })) next(true);
   }
 };
 </script>
