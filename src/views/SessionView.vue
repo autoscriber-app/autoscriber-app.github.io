@@ -46,16 +46,16 @@
       <v-card-subtitle style="color: pink;" class="text-center">
         Speech recognition is running!
       </v-card-subtitle>
-      <v-card-subtitle>
-        <p v-for="(item, index) in recordedSpeech" :key="index" :style="{
-          color: item.hot ? 'orange' : undefined
-        }" :class="{
-          'text-center': item.hot
-        }">
-          {{ item.text }}
-        </p>
-      </v-card-subtitle>
     </span>
+    <v-card-subtitle>
+      <p v-for="(item, index) in recordedSpeechReverse" :key="index" :style="{
+        color: item.hot ? 'orange' : undefined
+      }" :class="{
+        'text-center': item.hot
+      }">
+        {{ item.text }}
+      </p>
+    </v-card-subtitle>
     <v-card-actions class="justify-end">
       <v-btn v-if="isHost" class="pink justify-center"
         dark
@@ -87,13 +87,18 @@ export default {
     recordedSpeech: [{
       hot: true
     }],
-    uuid: '',
+    uid: '',
     recognition,
     started: false,
     copied: false,
     displayName: '',
     socket: null
   }),
+  computed: {
+    recordedSpeechReverse() {
+      return this.recordedSpeech.slice().reverse();
+    }
+  },
   methods: {
     startRecognition() {
       this.recognition.onresult = async (event) => {
@@ -112,7 +117,7 @@ export default {
           // Make post request after each blob
           const user = {
             meeting_id: this.sessionID,
-            uuid: this.uuid,
+            uid: this.uid,
             name: this.displayName
           };
           const blob = {
@@ -120,8 +125,8 @@ export default {
             dialogue: this.recordedSpeech[index].text,
           }; // Current blob
           const res = await axios.post(`${backend_domain}/add`, blob);
-          if (!this.uuid) {
-            this.uuid = res.data;
+          if (!this.uid) {
+            this.uid = res.data;
           }
         }
       };
@@ -147,7 +152,7 @@ export default {
         }
         await axios.post(`${backend_domain}/end`, {
           meeting_id: this.sessionID,
-          uid: this.uuid,
+          uid: this.uid,
           name: this.name
         });
         await this.$dialog.info({
@@ -186,10 +191,10 @@ export default {
     const name = (this.name || await askUser(this.$dialog, 'name') || 'Anonymous').trim();
     if (!name) return;
     this.displayName = name;
-    await axios.post(`${backend_domain}/join`, {
+    this.uid = (await axios.post(`${backend_domain}/join`, {
       name,
       meeting_id: this.sessionID
-    });
+    })).data.uid;
     this.connectWS();
   },
   props: {
