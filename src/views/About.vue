@@ -14,6 +14,7 @@
     <h2>Generate Notes</h2>
     <p>The meeting will automatically terminate once the host disconnects or clicks the "End the Session" button. Afterwards, Autoscriber's servers will process the recorded speech. Once processing is complete, you will be able to download bullet point notes as a Markdown file!
     <h2>Other Info</h2>
-    <p>The entire app (frontend, backend, processing library) are all open source <a href="https://github.com/autoscriber-app" target="_blank">on our GitHub organization</a>. Feel free to contribute!  
+    <p>The entire app (frontend, backend, processing library) are all open source <a href="https://github.com/autoscriber-app" target="_blank">on our GitHub organization</a>. Feel free to contribute!
+    </p>
   </div>
 </template>
