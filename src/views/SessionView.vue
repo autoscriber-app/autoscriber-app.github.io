@@ -172,7 +172,7 @@ export default {
     async connectWS() {
       if (this.isHost) {
         this.socket = new WebSocket(
-          `${backend_domain.replace('https', 'wss')}/hostWS?uid=${this.uid}&meeting_id=${this.sessionID}`
+          `${backend_domain.replace('https', 'wss')}/hostWS/${this.sessionID}/${this.uid}`
         );
       }
     }
