@@ -180,10 +180,8 @@ export default {
   },
   async mounted() {
     this.userID = this.uid;
-    if (!(await axios.get(`${backend_domain}/is_valid_meeting`, {
-      params: {
-        meeting_id: this.sessionID
-      }
+    if (!(await axios.post(`${backend_domain}/is_valid_meeting`, {
+      meeting_id: this.sessionID
     })).data) {
       await this.$dialog.error({
         title: 'Invalid Session',
