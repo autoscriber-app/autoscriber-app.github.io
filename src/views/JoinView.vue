@@ -59,7 +59,8 @@ export default {
         params: {
           sessionID: res.data.meeting_id,
           name,
-          isHost: true
+          isHost: true,
+          uid: res.data.uid
         }
       });
     },

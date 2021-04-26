@@ -87,7 +87,6 @@ export default {
     recordedSpeech: [{
       hot: true
     }],
-    uid: '',
     recognition,
     started: false,
     copied: false,
@@ -193,10 +192,11 @@ export default {
     const name = (this.name || await askUser(this.$dialog, 'name') || 'Anonymous').trim();
     if (!name) return;
     this.displayName = name;
-    this.uid = (await axios.post(`${backend_domain}/join`, {
-      name,
-      meeting_id: this.sessionID
-    })).data.uid;
+    if (!this.isHost)
+      this.uid = (await axios.post(`${backend_domain}/join`, {
+        name,
+        meeting_id: this.sessionID
+      })).data.uid;
     this.connectWS();
   },
   props: {
@@ -211,6 +211,10 @@ export default {
     isHost: {
       type: Boolean,
       default: false
+    },
+    uid: {
+      type: String,
+      default: ''
     }
   },
   async beforeRouteLeave(to, from, next) {
