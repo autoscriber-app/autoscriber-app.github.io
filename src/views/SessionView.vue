@@ -82,6 +82,7 @@ recognition.onstart = () => {
 };
 recognition.onaudioend = () => recognition.stop();
 recognition.lang = 'en-US';
+window.addEventListener('beforeunload', recognition.abort, false);
 export default {
   data: () => ({
     recordedSpeech: [{
