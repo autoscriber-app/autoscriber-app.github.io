@@ -92,12 +92,13 @@ export default {
     started: false,
     copied: false,
     displayName: '',
-    socket: null
+    socket: null,
+    userID: null
   }),
   computed: {
     recordedSpeechReverse() {
       return this.recordedSpeech.slice().reverse();
-    }
+    },
   },
   methods: {
     startRecognition() {
@@ -117,7 +118,7 @@ export default {
           // Make post request after each blob
           const user = {
             meeting_id: this.sessionID,
-            uid: this.uid,
+            uid: this.userID,
             name: this.displayName
           };
           const blob = {
@@ -125,8 +126,8 @@ export default {
             dialogue: this.recordedSpeech[index].text,
           }; // Current blob
           const res = await axios.post(`${backend_domain}/add`, blob);
-          if (!this.uid) {
-            this.uid = res.data;
+          if (!this.userID) {
+            this.userID = res.data;
           }
         }
       };
@@ -152,7 +153,7 @@ export default {
         }
         await axios.post(`${backend_domain}/end`, {
           meeting_id: this.sessionID,
-          uid: this.uid,
+          uid: this.userID,
           name: this.name
         });
         await this.$dialog.info({
@@ -172,12 +173,13 @@ export default {
     async connectWS() {
       if (this.isHost) {
         this.socket = new WebSocket(
-          `${backend_domain.replace('https', 'wss')}/hostWS/${this.sessionID}/${this.uid}`
+          `${backend_domain.replace('https', 'wss')}/hostWS/${this.sessionID}/${this.userID}`
         );
       }
     }
   },
-  async mounted(){
+  async mounted() {
+    this.userID = this.uid;
     if (!(await axios.get(`${backend_domain}/is_valid_meeting`, {
       params: {
         meeting_id: this.sessionID
@@ -194,7 +196,7 @@ export default {
     if (!name) return;
     this.displayName = name;
     if (!this.isHost)
-      this.uid = (await axios.post(`${backend_domain}/join`, {
+      this.userID = (await axios.post(`${backend_domain}/join`, {
         name,
         meeting_id: this.sessionID
       })).data.uid;
