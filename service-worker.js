@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/precache-manifest.af62dc35b441cde2003c57de30142ceb.js"
+  "/precache-manifest.69a1e58dbe6c6d62e8b6ed79f6d59f3b.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "autoscriber-app"});
