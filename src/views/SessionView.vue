@@ -180,9 +180,7 @@ export default {
   },
   async mounted() {
     this.userID = this.uid;
-    if (!(await axios.post(`${backend_domain}/is_valid_meeting`, {
-      meeting_id: this.sessionID
-    })).data) {
+    if (!(await axios.post(`${backend_domain}/is_valid_meeting?meeting_id=${this.sessionID}`)).data) {
       await this.$dialog.error({
         title: 'Invalid Session',
         text: 'The session you specified doesn\'t exist.'
