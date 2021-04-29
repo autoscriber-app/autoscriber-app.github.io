@@ -44,7 +44,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/robots.txt"
   },
   {
-    "revision": "2790a4dde8449497d9370fb5570cc75a",
+    "revision": "b156466e43550e99c680ec6dff81f1fd",
     "url": "/service-worker.js"
   }
 ]);
