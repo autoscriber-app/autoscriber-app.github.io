@@ -187,6 +187,7 @@ export default {
         title: 'Invalid Session',
         text: 'The session you specified doesn\'t exist.'
       });
+      this.ended = true;
       this.$router.push('/');
       return;
     }
