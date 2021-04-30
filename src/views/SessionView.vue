@@ -93,7 +93,8 @@ export default {
     copied: false,
     displayName: '',
     socket: null,
-    userID: null
+    userID: null,
+    ended: false
   }),
   computed: {
     recordedSpeechReverse() {
@@ -160,6 +161,7 @@ export default {
           title: 'Session Ended',
           text: 'The session was ended! Your notes will be available for download shortly.'
         });
+        this.ended = true;
         return true;
       } else return false;
     },
@@ -217,7 +219,8 @@ export default {
     }
   },
   async beforeRouteLeave(to, from, next) {
-    if (this.isHost) {
+    if (this.ended) next(true);
+    else if (this.isHost) {
       if (await this.endRecording()) next(true);
     } else if (await this.$dialog.confirm({
       title: this.isHost ? 'End the Session' : 'Disconnect from Session',
