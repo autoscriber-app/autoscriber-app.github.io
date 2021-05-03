@@ -47,15 +47,6 @@
         Speech recognition is running!
       </v-card-subtitle>
     </span>
-    <v-card-subtitle>
-      <p v-for="(item, index) in recordedSpeechReverse" :key="index" :style="{
-        color: item.hot ? 'orange' : undefined
-      }" :class="{
-        'text-center': item.hot
-      }">
-        {{ item.text }}
-      </p>
-    </v-card-subtitle>
     <v-card-actions class="justify-end">
       <v-btn v-if="isHost" class="pink justify-center"
         dark
@@ -66,6 +57,15 @@
         End the Session
       </v-btn>
     </v-card-actions>
+    <v-card-subtitle style="padding-top: 0px; padding-bottom: 0px;">
+      <p v-for="(item, index) in recordedSpeechReverse" :key="index" :style="{
+        color: item.hot ? 'orange' : undefined
+      }" :class="{
+        'text-center': item.hot
+      }">
+        {{ item.text }}
+      </p>
+    </v-card-subtitle>
   </v-card>
 </template>
 
