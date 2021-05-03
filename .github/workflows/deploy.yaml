@@ -15,7 +15,7 @@ jobs:
 
       - name: Install and Build
         run: |
-          VERSION=$(date '+%d/%m/%Y %H:%M:%S')
+          VERSION=$(date '+%d-%m-%Y %H-%M-%S')
           sed -i "s/PRECACHE_VERSION/$VERSION/g" public/service-worker.js
           npm install
           npm run build
