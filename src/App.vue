@@ -42,14 +42,16 @@
         <router-view/>
       </v-col>
     </v-content>
-    <div class="text-center" style="display: inline-block;" v-if="prompt && !installed">
-      <v-snackbar color="indigo">
-        <span style="display: inline-block; transform: translate(0, 50%) !important;">
-          Install Autoscriber as an app!
-        </span>
-        <v-btn dark style="float: right;" @click="install()" color="pink">Install</v-btn>
-      </v-snackbar>
-    </div>
+    <!-- 
+      <div class="text-center" style="display: inline-block;" v-if="prompt && !installed">
+        <v-snackbar color="indigo">
+          <span style="display: inline-block; transform: translate(0, 50%) !important;">
+            Install Autoscriber as an app!
+          </span>
+          <v-btn dark style="float: right;" @click="install()" color="pink">Install</v-btn>
+        </v-snackbar>
+      </div>
+    -->
   </v-app>
 </template>
 
@@ -80,10 +82,10 @@ export default {
     });
   },
   methods:{
-    async install() {
-      this.prompt.prompt();
-      if (await this.prompt.userChoice === 'accepted') this.installed = true;
-    }
+    // async install() {
+    //   this.prompt.prompt();
+    //   if (await this.prompt.userChoice === 'accepted') this.installed = true;
+    // }
   }
 };
 </script>
