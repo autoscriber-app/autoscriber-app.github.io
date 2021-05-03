@@ -177,6 +177,10 @@ export default {
         this.socket = new WebSocket(
           `${backend_domain.replace('https', 'wss')}/hostWS/${this.sessionID}/${this.userID}`
         );
+      } else {
+        this.socket = new WebSocket(
+          `${backend_domain.replace('https', 'wss')}/joinWS/${this.sessionID}/${this.userID}`
+        );
       }
     }
   },
