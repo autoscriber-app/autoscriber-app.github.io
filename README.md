@@ -1,5 +1,7 @@
 # autoscriber-app
 
+[![Deploy to GH Pages](https://github.com/autoscriber-app/autoscriber-app.github.io/actions/workflows/deploy.yaml/badge.svg)](https://github.com/autoscriber-app/autoscriber-app.github.io/actions/workflows/deploy.yaml)
+
 ## Project setup
 ```
 npm install

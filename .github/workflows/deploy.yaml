@@ -1,9 +1,6 @@
 name: Deploy to GH Pages
 
-on:
-  push:
-    branches:
-      - master
+on: workflow_dispatch
 
 jobs:
   deploy:
@@ -17,7 +14,9 @@ jobs:
           node-version: '12.x'
 
       - name: Install and Build
-        run: | 
+        run: |
+          VERSION=$(echo -n ${{ github.ref }} | sed 's/[refs\/tagv]//g')
+          sed -i "s/PRECACHE_VERSION/$VERSION/g" public/service-worker.js
           npm install
           npm run build
 
