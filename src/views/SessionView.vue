@@ -145,18 +145,20 @@ export default {
       this.started = false;
     },
     async endRecording() {
-      if (await this.$dialog.confirm({
+      if (!this.ended || await this.$dialog.confirm({
         title: 'End Session',
         text: 'Are you sure you want to end the session for all participants?'
       })){
         if (this.started) {
           this.stopRecognition();
         }
-        await axios.post(`${backend_domain}/end`, {
-          meeting_id: this.sessionID,
-          uid: this.userID,
-          name: this.name
-        });
+        if (!this.ended) {
+          await axios.post(`${backend_domain}/end`, {
+            meeting_id: this.sessionID,
+            uid: this.userID,
+            name: this.name
+          });
+        }
         await this.$dialog.info({
           title: 'Session Ended',
           text: 'The session was ended! Your notes will be available for download shortly.'
@@ -182,6 +184,32 @@ export default {
           `${backend_domain.replace('https', 'wss')}/joinWS/${this.sessionID}/${this.userID}`
         );
       }
+      this.socket.addEventListener('message', async event => {
+        const data = JSON.parse(event.data);
+        if (data.event == 'end_meeting') {
+          this.ended = true;
+          this.endRecording();
+        } else if (data.event == 'done_processing') {
+          if (await this.$dialog.confirm({
+            title: '',
+            text: '',
+            actions: {
+              false: 'Close',
+              true: {
+                text: 'Download',
+                color: 'primary'
+              },
+            }
+          })) {
+            this.$router.push({
+              name: 'Join',
+              params: {
+                downloadID: this.sessionID
+              }
+            });
+          }
+        }
+      });
     }
   },
   async mounted() {
@@ -192,7 +220,6 @@ export default {
         text: 'The session you specified doesn\'t exist.'
       });
       this.ended = true;
-      this.$router.push('/');
       return;
     }
     const name = (this.name || await askUser(this.$dialog, 'name') || 'Anonymous').trim();
@@ -238,7 +265,7 @@ export default {
         },
       }
     })) next(true);
-  }
+  },
 };
 </script>
 

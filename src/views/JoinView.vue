@@ -65,7 +65,7 @@ export default {
       });
     },
     async downloadNotes() {
-      const meetingID = await this.getMeetingId();
+      const meetingID = this.downloadID || await this.getMeetingId();
       if (meetingID) {
         const text = await axios.get(`${backend_domain}/download?id=${meetingID}`);
         if (typeof text !== 'string') error(this.$dialog, 
@@ -73,6 +73,15 @@ export default {
           text.data.detail);
         else saveAs(new Blob([text], {type: 'text/plain;charset=utf-8'}), `notes_${meetingID}.md`); 
       }
+    }
+  },
+  mounted() {
+    if (this.downloadID) this.downloadNotes();
+  },
+  props: {
+    downloadID: {
+      type: String,
+      default: ''
     }
   }
 };
