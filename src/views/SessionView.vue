@@ -177,11 +177,11 @@ export default {
     async connectWS() {
       if (this.isHost) {
         this.socket = new WebSocket(
-          `${backend_domain.replace('https', 'wss')}/hostWS/${this.sessionID}/${this.userID}`
+          `${backend_domain.replace('https', 'wss')}/ws/host/${this.sessionID}/${this.userID}`
         );
       } else {
         this.socket = new WebSocket(
-          `${backend_domain.replace('https', 'wss')}/joinWS/${this.sessionID}/${this.userID}`
+          `${backend_domain.replace('https', 'wss')}/ws/join/${this.sessionID}/${this.userID}`
         );
       }
       this.socket.addEventListener('message', async event => {
