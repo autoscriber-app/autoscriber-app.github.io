@@ -17,7 +17,7 @@
         Download Notes
       </v-btn>
     </v-card-actions>
-    <ShortDesc></ShortDesc>
+    <ShortDesc style="max-width: 800px;"></ShortDesc>
   </v-card>
 </template>
 
