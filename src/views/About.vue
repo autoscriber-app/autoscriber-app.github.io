@@ -1,7 +1,7 @@
 <template>
   <div class="about">
     <h1>What is Autoscriber?</h1>
-    <p>Autoscriber is a progressive web app (PWA) that listens to your microphone audio, transcribes your speech, and summarizes your meeting in bullet point format. During the meeting, participants simply open a session link and turn on their microphone. Once the meeting is over, Autoscriber will use AI language models to analyze the conversation and jot down important sentences automatically. 
+    <ShortDesc></ShortDesc>
     <h1>Who made this?</h1>
     <p>Autoscriber was made by the 2020-2021 <a href="https://lhswebdev.github.io/" target="_blank">Lynbrook Web Development Club</a>. The primary developers are <a href="https://github.com/KentoNishi/" target="_blank">Kento Nishi</a>, <a href="https://github.com/keshprad" target="_blank">Keshav Pradeep</a>, and <a href="https://github.com/saggins" target="_blank">Sangmin Chun</a>.
     <h1>How do I use Autoscriber?</h1>
@@ -18,3 +18,12 @@
     </p>
   </div>
 </template>
+
+<script>
+import ShortDesc from './ShortDesc.vue';
+export default {
+  components: {
+    ShortDesc
+  }
+};
+</script>

@@ -191,8 +191,8 @@ export default {
           this.endRecording();
         } else if (data.event == 'done_processing') {
           if (await this.$dialog.confirm({
-            title: '',
-            text: '',
+            title: 'Processing finished!',
+            text: 'You can now download the notes as a text file.',
             actions: {
               false: 'Close',
               true: {

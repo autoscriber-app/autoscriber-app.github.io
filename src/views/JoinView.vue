@@ -17,6 +17,7 @@
         Download Notes
       </v-btn>
     </v-card-actions>
+    <ShortDesc></ShortDesc>
   </v-card>
 </template>
 
@@ -25,6 +26,7 @@ import axios from 'axios';
 import askUser from '../components/askUser.js';
 import { saveAs } from 'file-saver';
 import error from '../components/error.js';
+import ShortDesc from './ShortDesc.vue';
 const backend_domain = process.env.VUE_APP_BACKEND_DOMAIN;
 const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
 recognition.continuous = false;
@@ -83,6 +85,9 @@ export default {
       type: String,
       default: ''
     }
+  },
+  components: {
+    ShortDesc
   }
 };
 </script>
