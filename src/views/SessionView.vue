@@ -175,15 +175,9 @@ export default {
       }, 1000);
     },
     async connectWS() {
-      if (this.isHost) {
-        this.socket = new WebSocket(
-          `${backend_domain.replace('https', 'wss')}/ws/host/${this.sessionID}/${this.userID}`
-        );
-      } else {
-        this.socket = new WebSocket(
-          `${backend_domain.replace('https', 'wss')}/ws/join/${this.sessionID}/${this.userID}`
-        );
-      }
+      this.socket = new WebSocket(
+        `${backend_domain.replace('https', 'wss')}/ws/${this.sessionID}/${this.userID}`
+      );
       this.socket.addEventListener('message', async event => {
         const data = JSON.parse(event.data);
         if (data.event == 'end_meeting') {
