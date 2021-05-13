@@ -2,7 +2,7 @@
   <v-app>
     <v-app-bar dark color="blue" app>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-      <!-- <v-toolbar-title>{{ APPNAME }}</v-toolbar-title> -->
+      <v-toolbar-title>{{ APPNAME }}</v-toolbar-title>
 
       <v-spacer></v-spacer>
       <!-- <v-switch
@@ -14,6 +14,11 @@
       <router-link tag="span" to="/">
         <v-btn icon>
           <v-icon>mdi-home</v-icon>
+        </v-btn>
+      </router-link>
+      <router-link tag="span" to="/about">
+        <v-btn icon>
+          <v-icon>mdi-information-variant</v-icon>
         </v-btn>
       </router-link>
     </v-app-bar>
@@ -58,7 +63,7 @@
 <script>
 export default {
   data: () => ({
-    APPNAME: 'Autoscriber App',
+    APPNAME: 'Autoscriber',
     drawer: false,
     navbarItems: [
       {

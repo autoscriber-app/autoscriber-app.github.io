@@ -1,11 +1,14 @@
 <template>
   <v-card color="#385F73" dark class="card" style="
     width: fit-content;
-    padding: 0px 25px 20px 25px;
+    height: fit-content;
+    padding: 25px;
   ">
-    <v-card-title class="headline justify-center"
-      >Welcome to Autoscriber!</v-card-title
-    >
+    <v-img src="../assets/logo.png" max-width="225px" style="width: 100%; border-radius: 10%; margin: 0 auto;"/>
+    <!-- <img src="../assets/logo.png" alt="Autoscriber logo" style="width: 100%; max-width: 250px; border-radius: 10%;" /> -->
+    <v-card-title class="headline justify-center text-center">
+      Welcome to Autoscriber!
+    </v-card-title>
     <v-card-actions class="justify-center" style="flex-wrap: wrap;">
       <v-btn class="blue paddedButton" dark large @click="createSession()">
         Create a New Session
@@ -17,7 +20,7 @@
         Download Notes
       </v-btn>
     </v-card-actions>
-    <ShortDesc style="max-width: 800px;"></ShortDesc>
+    <ShortDesc style="max-width: 800px; margin: 10px 0px 0px 0px" />
   </v-card>
 </template>
 
