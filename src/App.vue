@@ -57,11 +57,16 @@
         </v-snackbar>
       </div>
     -->
+    <Footer :APPNAME="APPNAME" />
   </v-app>
 </template>
 
 <script>
+import Footer from './views/Footer';
 export default {
+  components: {
+    Footer
+  },
   data: () => ({
     APPNAME: 'Autoscriber',
     drawer: false,
