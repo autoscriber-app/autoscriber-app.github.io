@@ -5,7 +5,6 @@
     padding: 25px;
   ">
     <v-img src="../assets/logo.png" max-width="225px" style="width: 100%; border-radius: 10%; margin: 0 auto;"/>
-    <!-- <img src="../assets/logo.png" alt="Autoscriber logo" style="width: 100%; max-width: 250px; border-radius: 10%;" /> -->
     <v-card-title class="headline justify-center text-center">
       Welcome to Autoscriber!
     </v-card-title>
