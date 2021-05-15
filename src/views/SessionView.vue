@@ -127,7 +127,6 @@ export default {
   },
   methods: {
     runDialogs() {
-      console.log(this.awaitingDialog, this.queuedDialogs);
       if (!this.awaitingDialog) {
         this.queuedDialogs.forEach(item => item());
         this.queuedDialogs = [];
