@@ -62,7 +62,7 @@
       </v-btn>
     </v-card-actions>
     <v-card-subtitle style="padding-top: 0px; padding-bottom: 0px;">
-      <p
+      <div
         v-for="(item, index) in recordedSpeechReverse"
         :key="index"
         :style="{
@@ -72,8 +72,10 @@
           'text-center': item.hot,
         }"
       >
-        {{ item.text }}
-      </p>
+        <p v-if="(item.hot && item.text) || !item.self">
+          <strong>{{ item.name || 'Recognition output' }}</strong>: {{ item.text }}
+        </p>
+      </div>
     </v-card-subtitle>
   </v-card>
 </template>
@@ -96,9 +98,6 @@ window.addEventListener('beforeunload', recognition.abort, false);
 export default {
   data: () => ({
     recordedSpeech: [
-      {
-        hot: true,
-      },
     ],
     recognition,
     started: false,
@@ -107,10 +106,14 @@ export default {
     socket: null,
     userID: null,
     ended: false,
+    currentSpeech: {
+      hot: true,
+      text: ''
+    }
   }),
   computed: {
     recordedSpeechReverse() {
-      return this.recordedSpeech.slice().reverse();
+      return [this.currentSpeech, ...this.recordedSpeech.slice().reverse()];
     },
   },
   methods: {
@@ -121,14 +124,9 @@ export default {
           .map((d) => d.transcript)
           .join(' ');
         // const confidence = result[0].confidence;
-        const index = Math.max(this.recordedSpeech.length - 1, 0);
-        this.$set(this.recordedSpeech[index], 'text', resultText);
+        this.$set(this.currentSpeech, 'text', resultText);
         if (result.isFinal) {
           console.debug(event);
-          this.recordedSpeech[index].hot = false;
-          this.recordedSpeech.push({
-            hot: true,
-          });
 
           // Make post request after each blob
           const user = {
@@ -138,7 +136,7 @@ export default {
           };
           const blob = {
             user: user,
-            dialogue: this.recordedSpeech[index].text,
+            dialogue: this.currentSpeech.text,
           }; // Current blob
           const res = await axios.post(`${backend_domain}/add`, blob);
           if (!this.userID) {
@@ -177,7 +175,7 @@ export default {
             name: this.name,
           });
         }
-        await this.$dialog.info({
+        this.$dialog.info({
           title: 'Session Ended',
           text:
             'The session was ended! Your notes will be available for download shortly.',
@@ -226,6 +224,12 @@ export default {
               },
             });
           }
+        } else if (data.event == 'transcript_entry') {
+          this.recordedSpeech.push({
+            self: false,
+            text: data.message,
+            name: data.name
+          });
         }
       });
     },
