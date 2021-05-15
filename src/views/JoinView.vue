@@ -1,10 +1,19 @@
 <template>
-  <v-card color="#385F73" dark class="card" style="
+  <v-card
+    color="#385F73"
+    dark
+    class="card"
+    style="
     width: fit-content;
     height: fit-content;
     padding: 25px;
-  ">
-    <v-img src="../assets/logo.png" max-width="225px" style="width: 100%; border-radius: 10%; margin: 0 auto;"/>
+  "
+  >
+    <v-img
+      src="../assets/logo.png"
+      max-width="225px"
+      style="width: 100%; border-radius: 10%; margin: 0 auto;"
+    />
     <v-card-title class="headline justify-center text-center">
       Welcome to Autoscriber!
     </v-card-title>
@@ -16,7 +25,7 @@
         Join a Session
       </v-btn>
       <v-btn class="gray paddedButton" dark large @click="downloadNotes()">
-        Download Notes
+        Download
       </v-btn>
     </v-card-actions>
     <ShortDesc style="max-width: 800px; margin: 10px 0px 0px 0px" />
@@ -26,11 +35,12 @@
 <script>
 import axios from 'axios';
 import askUser from '../components/askUser.js';
-import { saveAs } from 'file-saver';
+// import { saveAs } from 'file-saver';
 import error from '../components/error.js';
 import ShortDesc from './ShortDesc.vue';
 const backend_domain = process.env.VUE_APP_BACKEND_DOMAIN;
-const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+const recognition = new (window.SpeechRecognition ||
+  window.webkitSpeechRecognition)();
 recognition.continuous = false;
 recognition.interimResults = true;
 recognition.onstart = () => {
@@ -39,8 +49,7 @@ recognition.onstart = () => {
 recognition.onaudioend = () => recognition.stop();
 recognition.lang = 'en-US';
 export default {
-  data: () => ({
-  }),
+  data: () => ({}),
   methods: {
     async getMeetingId() {
       let meetingID = await askUser(this.$dialog, 'session');
@@ -56,28 +65,42 @@ export default {
     async createSession() {
       const name = await askUser(this.$dialog, 'name');
       if (!name) return;
-      const res = await axios.post(`${backend_domain}/host`, {
-      });
+      const res = await axios.post(`${backend_domain}/host`, {});
       this.$router.push({
         name: 'Session',
         params: {
           sessionID: res.data.meeting_id,
           name,
           isHost: true,
-          uid: res.data.uid
-        }
+          uid: res.data.uid,
+        },
       });
     },
     async downloadNotes() {
-      const meetingID = this.downloadID || await this.getMeetingId();
+      const meetingID = this.downloadID || (await this.getMeetingId());
       if (meetingID) {
-        const text = await axios.get(`${backend_domain}/download?id=${meetingID}`);
-        if (typeof text !== 'string') error(this.$dialog, 
-          new Error('Could not download notes'), 
-          text.data.detail);
-        else saveAs(new Blob([text], {type: 'text/plain;charset=utf-8'}), `notes_${meetingID}.md`); 
+        const url = `${backend_domain}/notes?id=${meetingID}`;
+        const response = (await axios.get(url, {
+          responseType: 'stream'
+        }));
+        const text = response.data;
+        if ((typeof text !== 'string') || !text) {
+          let errorMessage = 'Notes document was empty';
+          try {
+            errorMessage = text.data.detail;
+          // eslint-disable-next-line no-empty
+          } catch (e) {
+          }
+          error(
+            this.$dialog,
+            new Error('Could not download notes'),
+            errorMessage
+          );
+        } else {
+          window.location.href = url;
+        }
       }
-    }
+    },
   },
   mounted() {
     if (this.downloadID) this.downloadNotes();
@@ -85,12 +108,12 @@ export default {
   props: {
     downloadID: {
       type: String,
-      default: ''
-    }
+      default: '',
+    },
   },
   components: {
-    ShortDesc
-  }
+    ShortDesc,
+  },
 };
 </script>
 

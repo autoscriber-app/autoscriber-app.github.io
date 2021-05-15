@@ -8,7 +8,8 @@ const routes = [
   {
     path: '/',
     name: 'Join',
-    component: JoinView
+    component: JoinView,
+    props: true
   },
   {
     path: '/session/:sessionID',
