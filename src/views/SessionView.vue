@@ -67,7 +67,8 @@
         :key="index"
         :style="{
           color: item.hot ? 'orange' : undefined,
-          textAlign: item.uid == userID ? 'right' : undefined
+          textAlign: item.uid == userID ? 'right' : undefined,
+          fontStyle: item.uid == userID ? 'italics' : undefined,
         }"
         :class="{
           'text-center': item.hot,
@@ -151,7 +152,7 @@ export default {
           };
           const blob = {
             user: user,
-            dialogue: this.currentSpeech.text,
+            dialogue: `${this.currentSpeech.text}`,
           }; // Current blob
           const res = await axios.post(`${backend_domain}/add`, blob);
           if (!this.userID) {

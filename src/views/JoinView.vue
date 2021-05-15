@@ -76,8 +76,8 @@ export default {
         },
       });
     },
-    async downloadNotes() {
-      const meetingID = this.downloadID || (await this.getMeetingId());
+    async downloadNotes(id='') {
+      const meetingID = id || (await this.getMeetingId());
       if (meetingID) {
         const url = `${backend_domain}/notes?id=${meetingID}`;
         const response = (await axios.get(url, {
@@ -103,7 +103,9 @@ export default {
     },
   },
   mounted() {
-    if (this.downloadID) this.downloadNotes();
+    if (this.downloadID) {
+      this.downloadNotes(this.downloadID);
+    }
   },
   props: {
     downloadID: {
