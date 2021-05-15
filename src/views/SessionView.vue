@@ -252,6 +252,14 @@ export default {
             name: data.name,
             uid: data.uid
           });
+        } else if (data.event == 'join_meeting') {
+          data.previous_dialogue.forEach(item => {
+            this.recordedSpeech.push({
+              self: false,
+              text: item[1],
+              name: item[0]
+            });
+          });
         }
       });
     },
