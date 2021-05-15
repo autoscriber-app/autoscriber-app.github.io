@@ -67,6 +67,7 @@
         :key="index"
         :style="{
           color: item.hot ? 'orange' : undefined,
+          textAlign: item.uid == userID ? 'right' : undefined
         }"
         :class="{
           'text-center': item.hot,
@@ -109,14 +110,28 @@ export default {
     currentSpeech: {
       hot: true,
       text: ''
-    }
+    },
+    awaitingDialog: false,
+    queuedDialogs: []
   }),
+  watch: {
+    awaitingDialog() {
+      this.runDialogs();
+    }
+  },
   computed: {
     recordedSpeechReverse() {
       return [this.currentSpeech, ...this.recordedSpeech.slice().reverse()];
     },
   },
   methods: {
+    runDialogs() {
+      console.log(this.awaitingDialog, this.queuedDialogs);
+      if (!this.awaitingDialog) {
+        this.queuedDialogs.forEach(item => item());
+        this.queuedDialogs = [];
+      }
+    },
     startRecognition() {
       this.recognition.onresult = async (event) => {
         const result = event.results[event.results.length - 1];
@@ -165,6 +180,7 @@ export default {
             'Are you sure you want to end the session for all participants?',
         }))
       ) {
+        this.awaitingDialog = true;
         if (this.started) {
           this.stopRecognition();
         }
@@ -175,11 +191,12 @@ export default {
             name: this.name,
           });
         }
-        this.$dialog.info({
+        await this.$dialog.info({
           title: 'Session Ended',
           text:
             'The session was ended! Your notes will be available for download shortly.',
         });
+        this.awaitingDialog = false;
         this.ended = true;
         return true;
       } else return false;
@@ -204,8 +221,8 @@ export default {
           this.ended = true;
           this.endRecording();
         } else if (data.event == 'done_processing') {
-          if (
-            await this.$dialog.confirm({
+          const func = async () => {
+            if (await this.$dialog.confirm({
               title: 'Processing finished!',
               text: 'You can now download the notes as a text file.',
               actions: {
@@ -216,19 +233,23 @@ export default {
                 },
               },
             })
-          ) {
-            this.$router.push({
-              name: 'Join',
-              params: {
-                downloadID: id,
-              },
-            });
-          }
+            ) {
+              this.$router.push({
+                name: 'Join',
+                params: {
+                  downloadID: id,
+                },
+              });
+            }
+          };
+          if (!this.awaitingDialog) func();
+          else this.queuedDialogs.push(func);
         } else if (data.event == 'transcript_entry') {
           this.recordedSpeech.push({
             self: false,
             text: data.message,
-            name: data.name
+            name: data.name,
+            uid: data.uid
           });
         }
       });
