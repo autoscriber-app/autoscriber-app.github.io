@@ -16,17 +16,13 @@ Autoscriber is a progressive web app (PWA) that listens to your microphone audio
 
 ### Who made this?
 
-<div align="center">
-
 **Primary Developers**
 
 | Kento Nishi | Keshav Pradeep | Sangmin Chun |
 | :------------: | :------------: | :------------: |
-| <a href="https://github.com/KentoNishi"><img width="150" src="https://avatars.githubusercontent.com/u/38841491" alt="KentoNishi"></a> | <a href="https://github.com/keshprad"><img width="150" src="https://avatars.githubusercontent.com/u/32313895" alt="keshprad"></a> | <a href="https://github.com/saggins"><img width="150" src="https://avatars.githubusercontent.com/u/27894821" alt="saggins"> |
+| <a href="https://github.com/KentoNishi"><img width="75" src="https://avatars.githubusercontent.com/u/38841491" alt="KentoNishi"></a> | <a href="https://github.com/keshprad"><img width="75" src="https://avatars.githubusercontent.com/u/32313895" alt="keshprad"></a> | <a href="https://github.com/saggins"><img width="75" src="https://avatars.githubusercontent.com/u/27894821" alt="saggins"> |
 
 Autoscriber was made by the 2020-2021 [Lynbrook Web Development Club](https://lhswebdev.github.io/).
-
-</div>
 
 ### How do I use Autoscriber?
 
